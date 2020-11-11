@@ -11,3 +11,66 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/* Navbar */
+.bg-blue {
+  background-color: #314c67;
+  color: white;
+}
+.nav-link-title {
+  color: white !important;
+}
+
+.title-name{
+  font-size: 36px !important;
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.text-footer {
+  color: white;
+  text-align: left;
+}
+
+.container-footer {
+  margin-left: 0px !important;
+  margin-right: 85% !important;
+}
+code {
+  font-size: 80%;
+}
+
+/* form */
+
+.registration-form {
+  margin: 10% 25% 0% 25%;
+  background-color: #E8E8E8;
+  padding: 1% 1% 1% 1%;
+}
+@media screen and (max-width: 600px) {
+  .registration-form {
+    margin: 20% 1% 40% 1%;
+    background-color: #E8E8E8;
+    padding: 1% 1% 1% 1%;
+  }
+}
+
+.form-error {
+  color: red;
+}
+
