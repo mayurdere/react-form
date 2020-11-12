@@ -1,15 +1,30 @@
 import React from 'react';
-import Thankyou from './Thankyou';
 
 export class Form extends React.Component {
-    state = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        reEnterEmail: "",
-        password: "",
-        isSubmitted: false
-    };
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            username: "mayur",
+            phone: "",
+            email: "",
+            password: "",
+            gender: "male",
+            salary: "",
+            address: "Navi Mumbai",
+            isSubmitted: false
+        }
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+    componentDidMount() {
+        const json = localStorage.getItem('details')
+        const details = JSON.parse(json)
+        this.setState(details)
+    }
+    componentDidUpdate(prevProps, prevState) {
+        const json = JSON.stringify(this.state)
+        localStorage.setItem('details', json)
+    }
 
     emailChangeHandler = (e) => {
         this.setState({
@@ -17,19 +32,14 @@ export class Form extends React.Component {
         })
     };
 
-    renterEmailChangeHandler = (e) => {
+    usernameChange = (e) => {
         this.setState({
-            reEnterEmail: e.target.value
+            username: e.target.value
         })
     }
-    firstNameChange = (e) => {
+    phoneChange = (e) => {
         this.setState({
-            firstName: e.target.value
-        })
-    }
-    lastNameChange = (e) => {
-        this.setState({
-            lastName: e.target.value
+            phone: e.target.value
         })
     }
     passwordChangeHandler = (e) => {
@@ -37,13 +47,48 @@ export class Form extends React.Component {
             password: e.target.value
         })
     }
+    genderChangeHandler = (e) => {
+        this.setState({
+            gender: e.target.value
+        })
+    }
 
+    addressChangeHandler = (e) => {
+        this.setState({
+            address: e.target.value
+        })
+    }
+    salaryChangeHandler = (e) => {
+        this.setState({
+            salary: e.target.value
+        })
+    }
     validate = () => {
-        let firstNameError = "";
+        let usernameError = "";
         let emailError = "";
-        let reEnterEmailError = "";
         let passwordError = "";
-
+        let phoneError = "";
+        if (this.state.username.length == 0) {
+            usernameError = 'Username cannot be empty'
+        }
+        if (usernameError) {
+            this.setState({ usernameError });
+            return false;
+        }
+        if (this.state.password.length < 8) {
+            passwordError = 'Password must have atleast 8 characters'
+        }
+        if (passwordError) {
+            this.setState({ passwordError });
+            return false;
+        }
+        if (this.state.phone.length < 10) {
+            phoneError = 'Phone must have atleast 10 characters'
+        }
+        if (phoneError) {
+            this.setState({ phoneError });
+            return false;
+        }
         if (!this.state.email.includes('@')) {
             emailError = 'Invalid Email'
         }
@@ -51,13 +96,17 @@ export class Form extends React.Component {
             this.setState({ emailError });
             return false;
         }
-        if (this.state.email !== this.state.reEnterEmail) {
-            // reEnterEmailError = 'Both emails did not matched'
-            reEnterEmailError = 'Both emails did not matched'
-        }
-        if (reEnterEmailError) {
-            this.setState({ reEnterEmailError });
-            return false;
+        if (this.state.salary) {
+            let salary = this.state.salary;
+            salary = salary.toString();
+            let lastThree = salary.substring(salary.length - 3);
+            let otherNumbers = salary.substring(0, salary.length - 3);
+            if (otherNumbers != '')
+                lastThree = ',' + lastThree;
+            let res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+            this.setState({
+                salary: res
+            })
         }
         return true;
     };
@@ -67,10 +116,9 @@ export class Form extends React.Component {
         if (isValid) {
             console.log(this.state);
         }
-        this.setState({'isSubmitted': true });
-        
+        this.setState({ 'isSubmitted': true });
     }
-    
+
     render() {
         return (
             <div className="registration-form">
@@ -78,70 +126,59 @@ export class Form extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-row">
                         <div className="form-group col-md-6">
-                            <input type="text" className="form-control" id="first-name" placeholder="First Name" value={this.state.firstName} onChange={this.firstNameChange} required />
-                            <div className="form-error">{this.state.firstNameError}</div>
+                            <label>Username</label>
+                            <input type="text" className="form-control" id="username" placeholder="Username" value={this.state.username} onChange={this.usernameChange} />
+                            <div className="form-error">{this.state.usernameError}</div>
                         </div>
                         <div className="form-group col-md-6">
-                            <input type="text" className="form-control" id="last-name" placeholder="Last Name" value={this.state.LastName} onChange={this.lastNameChange} required />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <input type="text" className="form-control" id="email" placeholder="Your Email" value={this.state.email} onChange={this.emailChangeHandler} required />
-                        <div className="form-error">{this.state.emailError}</div>
-                    </div>
-                    <div className="form-group">
-                        <input type="text" className="form-control" id="reenter-email" placeholder="Re-enter Email" value={this.state.reEnterEmail} onChange={this.renterEmailChangeHandler} required />
-                        <div className="form-error">{this.state.reEnterEmailError}</div>
+                            <label>Password</label>
+                            <input type="password" className="form-control" id="password" placeholder="New Password" value={this.state.password} onChange={this.passwordChangeHandler}  required/>
+                            <div className="form-error">{this.state.passwordError}</div>
 
-                    </div>
-                    <div className="form-group">
-                        <input type="password" className="form-control" id="password" placeholder="New Password" value={this.state.password} onChange={this.passwordChangeHandler} required />
-                    </div>
-                    <div className="form-row">
-                        <label className="ml-2">Birthday</label>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group col-md-2">
-                            <select className="form-control" id="exampleFormControlSelect1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-                        </div>
-                        <div className="form-group col-md-2">
-                            <select className="form-control" id="exampleFormControlSelect1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-                        </div>
-                        <div className="form-group col-md-2">
-                            <select className="form-control" id="exampleFormControlSelect1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
                         </div>
                     </div>
                     <div className="form-row">
-                        <div className="form-check ml-2">
-                            <input className="form-check-input" type="radio" name="female" id="female" value="female" />
-                            <label className="form-check-label" htmlFor="female">Female</label>
+                        <div className="form-group col-md-6">
+                            <label>Email</label>
+                            <input type="text" className="form-control" id="email" placeholder="Your Email" value={this.state.email} onChange={this.emailChangeHandler} required />
+                            <div className="form-error">{this.state.emailError}</div>
                         </div>
-                        <div className="form-check ml-2">
-                            <input className="form-check-input" type="radio" name="male" id="male" value="male" />
-                            <label className="form-check-label" htmlFor="male">Male</label>
+                        <div className="form-group col-md-6">
+                            <label>Phone</label>
+                            <input type="number" className="form-control" id="phone" placeholder="Phone" value={this.state.phone} onChange={this.phoneChange} required />
+                            <div className="form-error">{this.state.phoneError}</div>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Sign in</button>
+
+                    <div className="form-row">
+                        <div className="form-group col-md-6">
+                            <label>Gender</label>
+                            <select className="form-control" onChange={this.genderChangeHandler} value={this.state.gender}>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div className="form-group col-md-6">
+                            <label>Salary</label>
+                            <input type="text" className="form-control" id="salary" placeholder="Salary" value={this.state.salary} onChange={this.salaryChangeHandler} required />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col-md-12">
+                            <label>Address</label>
+                            <textarea className="form-control" rows="3" id="address" placeholder="Address" value={this.state.address} onChange={this.addressChangeHandler} readOnly></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
-                {this.state.isSubmitted && <Thankyou/>}
+                {
+                    this.state.isSubmitted && 
+                    <div>
+                        <h3>Congrats! Your data is saved in localstorage.</h3>
+                        <p>You can visit back the page or refresh, you will not lose the data</p>
+                    </div>
+                }
             </div>
 
         );
