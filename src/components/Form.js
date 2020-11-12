@@ -1,4 +1,5 @@
 import React from 'react';
+import Thankyou from './Thankyou';
 
 export class Form extends React.Component {
     constructor(props) {
@@ -173,11 +174,7 @@ export class Form extends React.Component {
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
                 {
-                    this.state.isSubmitted && 
-                    <div>
-                        <h3>Congrats! Your data is saved in localstorage.</h3>
-                        <p>You can visit back the page or refresh, you will not lose the data</p>
-                    </div>
+                    this.state.isSubmitted && <Thankyou/>
                 }
             </div>
 

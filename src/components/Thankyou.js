@@ -6,9 +6,8 @@ export class Thankyou extends React.Component {
     render() {
         return (
             <div>
-            <Header/>
-                    Thankyou for submitting form
-            <Footer/>
+                <h3>Congrats! Your data is saved in localstorage.</h3>
+                <p>You can visit back the page or refresh, you will not lose the data</p>
             </div>
 
         );
